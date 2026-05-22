@@ -4,6 +4,6 @@ import { DashboardPageComponent } from './pages/dashboard-page/dashboard-page';
 export const dashboardRoutes: Routes = [
   {
     path: '',
-    component: DashboardPageComponent
-  }
+    component: DashboardPageComponent,
+  },
 ];

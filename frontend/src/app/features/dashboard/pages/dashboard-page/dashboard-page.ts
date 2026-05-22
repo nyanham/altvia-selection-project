@@ -14,29 +14,29 @@ interface DashboardMetric {
   imports: [MatButtonModule, MatCardModule, MatIconModule],
   templateUrl: './dashboard-page.html',
   styleUrl: './dashboard-page.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardPageComponent {
   protected readonly metrics: DashboardMetric[] = [
     {
       label: 'Appointments today',
       value: '18',
-      icon: 'event_available'
+      icon: 'event_available',
     },
     {
       label: 'Professionals active',
       value: '6',
-      icon: 'groups'
+      icon: 'groups',
     },
     {
       label: 'Clients this week',
       value: '43',
-      icon: 'face'
+      icon: 'face',
     },
     {
       label: 'Service utilization',
       value: '82%',
-      icon: 'insights'
-    }
+      icon: 'insights',
+    },
   ];
 }

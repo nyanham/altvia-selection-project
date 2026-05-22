@@ -1,0 +1,42 @@
+<section class="dashboard-hero">
+  <div>
+    <p class="dashboard-hero__eyebrow">Dashboard</p>
+    <h2>Operational clarity for a small salon team</h2>
+    <p>
+      This page is the starting point for the frontend scaffold. Feature work will plug into
+      the shared shell, routing, and design tokens introduced here.
+    </p>
+  </div>
+
+  <button mat-flat-button type="button">Review today's schedule</button>
+</section>
+
+<section class="metrics-grid">
+  @for (metric of metrics; track metric.label) {
+    <mat-card class="metric-card">
+      <mat-icon>{{ metric.icon }}</mat-icon>
+      <p>{{ metric.label }}</p>
+      <strong>{{ metric.value }}</strong>
+    </mat-card>
+  }
+</section>
+
+<section class="dashboard-panels">
+  <mat-card class="panel-card panel-card--wide">
+    <p class="dashboard-hero__eyebrow">Next Increment</p>
+    <h3>Feature scaffolding</h3>
+    <p>
+      The next commit will add the appointments, clients, professionals, and services page
+      structure, plus shared UI primitives and local feature services.
+    </p>
+  </mat-card>
+
+  <mat-card class="panel-card">
+    <p class="dashboard-hero__eyebrow">Design Direction</p>
+    <h3>Clean and credible</h3>
+    <p>
+      Keep the frontend lightweight, use standalone components, and prefer feature-local logic
+      over app-wide abstractions.
+    </p>
+  </mat-card>
+</section>

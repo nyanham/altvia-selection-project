@@ -1,0 +1,50 @@
+<div class="shell">
+  <aside class="shell__sidebar">
+    <div class="shell__brand">
+      <div class="shell__brand-mark">S</div>
+      <div>
+        <p class="shell__eyebrow">Salon Scheduling</p>
+        <h1>Studio Flow</h1>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <nav class="shell__nav" mat-nav-list>
+      @for (item of navigationItems; track item.route) {
+        <a
+          mat-list-item
+          [routerLink]="item.route"
+          routerLinkActive="is-active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+          <span matListItemTitle>{{ item.label }}</span>
+        </a>
+      }
+    </nav>
+
+    <div class="shell__note">
+      <p class="shell__eyebrow">Frontend Goal</p>
+      <p>Create a clean, recruiter-friendly UI foundation before feature detail work.</p>
+    </div>
+  </aside>
+
+  <div class="shell__workspace">
+    <header class="shell__header">
+      <div>
+        <p class="shell__eyebrow">Operations</p>
+        <h2>Salon overview</h2>
+      </div>
+
+      <button mat-stroked-button type="button">
+        <mat-icon>today</mat-icon>
+        Today
+      </button>
+    </header>
+
+    <main class="shell__content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

@@ -15,11 +15,11 @@ import { primaryNavigation } from '../../config/navigation.config';
     MatListModule,
     RouterLink,
     RouterLinkActive,
-    RouterOutlet
+    RouterOutlet,
   ],
   templateUrl: './app-shell.html',
   styleUrl: './app-shell.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppShellComponent {
   protected readonly navigationItems = primaryNavigation;

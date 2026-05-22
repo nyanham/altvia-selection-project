@@ -1,0 +1,20 @@
+.empty-state {
+  display: grid;
+  justify-items: start;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  border-radius: 1.25rem;
+}
+
+.empty-state h2,
+.empty-state p {
+  margin: 0;
+}
+
+.empty-state mat-icon {
+  color: #0b57d0;
+}
+
+.empty-state p {
+  color: #52607a;
+}

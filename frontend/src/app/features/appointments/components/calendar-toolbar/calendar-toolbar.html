@@ -1,0 +1,22 @@
+<div class="calendar-toolbar">
+  <div class="calendar-toolbar__group">
+    <button mat-stroked-button type="button">
+      <mat-icon>today</mat-icon>
+      Today
+    </button>
+
+    <button mat-icon-button type="button" aria-label="Previous period">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+
+    <button mat-icon-button type="button" aria-label="Next period">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </div>
+
+  <div class="calendar-toolbar__group">
+    @for (view of views; track view) {
+      <button mat-stroked-button type="button">{{ view }}</button>
+    }
+  </div>
+</div>

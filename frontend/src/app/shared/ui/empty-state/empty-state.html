@@ -1,0 +1,10 @@
+<mat-card class="empty-state">
+  <mat-icon>{{ icon() }}</mat-icon>
+  <h2>{{ title() }}</h2>
+  @if (description()) {
+    <p>{{ description() }}</p>
+  }
+  @if (actionLabel()) {
+    <button mat-stroked-button type="button">{{ actionLabel() }}</button>
+  }
+</mat-card>

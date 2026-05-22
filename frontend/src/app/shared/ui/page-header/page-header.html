@@ -1,0 +1,16 @@
+<header class="page-header">
+  <div>
+    <p class="page-header__eyebrow">{{ eyebrow() }}</p>
+    <h1>{{ title() }}</h1>
+    @if (description()) {
+      <p class="page-header__description">{{ description() }}</p>
+    }
+  </div>
+
+  @if (actionLabel()) {
+    <button mat-flat-button type="button">
+      <mat-icon>{{ actionIcon() }}</mat-icon>
+      {{ actionLabel() }}
+    </button>
+  }
+</header>

@@ -10,6 +10,16 @@ replay_pid*
 target/
 build/
 out/
+dist/
+coverage/
+
+# Node and Angular
+node_modules/
+.angular/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
 # Logs
 *.log

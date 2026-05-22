@@ -1,0 +1,36 @@
+# Java and Maven
+*.class
+*.jar
+*.war
+*.ear
+hs_err_pid*
+replay_pid*
+
+# Build output
+target/
+build/
+out/
+
+# Logs
+*.log
+logs/
+
+# Environment and local overrides
+.env
+.env.*
+!.env.example
+*.local
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+.factorypath
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -1,0 +1,50 @@
+<h2 mat-dialog-title>{{ isEditMode ? 'Edit client' : 'Add client' }}</h2>
+
+<mat-dialog-content>
+  <form class="client-form" [formGroup]="form">
+    <mat-form-field appearance="outline">
+      <mat-label>Full name</mat-label>
+      <input matInput formControlName="fullName" aria-label="Full name" placeholder="Full name" />
+      @if (form.controls.fullName.hasError('required')) {
+        <mat-error>Full name is required.</mat-error>
+      } @else if (form.controls.fullName.hasError('maxlength')) {
+        <mat-error>Full name must have at most 120 characters.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Phone</mat-label>
+      <input matInput formControlName="phone" aria-label="Phone" placeholder="Phone" />
+      @if (form.controls.phone.hasError('required')) {
+        <mat-error>Phone is required.</mat-error>
+      } @else if (form.controls.phone.hasError('maxlength')) {
+        <mat-error>Phone must have at most 20 characters.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" aria-label="Email" placeholder="Email" />
+      @if (form.controls.email.hasError('email')) {
+        <mat-error>Email must be valid.</mat-error>
+      } @else if (form.controls.email.hasError('maxlength')) {
+        <mat-error>Email must have at most 120 characters.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Notes</mat-label>
+      <textarea matInput formControlName="notes" rows="4" aria-label="Notes" placeholder="Notes"></textarea>
+      @if (form.controls.notes.hasError('maxlength')) {
+        <mat-error>Notes must have at most 500 characters.</mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="close()">Cancel</button>
+  <button mat-flat-button type="button" (click)="save()">
+    {{ isEditMode ? 'Save changes' : 'Create client' }}
+  </button>
+</mat-dialog-actions>

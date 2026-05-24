@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [MatButtonModule, MatIconModule],
   templateUrl: './page-header.html',
   styleUrl: './page-header.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageHeaderComponent {
   readonly eyebrow = input('Workspace');
@@ -15,4 +15,5 @@ export class PageHeaderComponent {
   readonly description = input('');
   readonly actionLabel = input<string | null>(null);
   readonly actionIcon = input('add');
+  readonly actionClicked = output<void>();
 }

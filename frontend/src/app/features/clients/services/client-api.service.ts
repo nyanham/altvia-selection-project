@@ -4,7 +4,7 @@ import { apiBaseUrl, apiEndpoints } from '../../../core/config/api.config';
 import { Client, ClientUpsertRequest } from '../models/client.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ClientApiService {
   private readonly http = inject(HttpClient);
@@ -20,5 +20,9 @@ export class ClientApiService {
 
   update(clientId: number, request: ClientUpsertRequest) {
     return this.http.put<Client>(`${this.baseUrl}/${clientId}`, request);
+  }
+
+  delete(clientId: number) {
+    return this.http.delete<void>(`${this.baseUrl}/${clientId}`);
   }
 }

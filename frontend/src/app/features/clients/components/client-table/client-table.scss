@@ -61,6 +61,13 @@ table {
   color: #4d596f;
 }
 
+.table-shell__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.25rem;
+}
+
 @media (width <= 640px) {
   .table-shell {
     padding: 0.75rem;

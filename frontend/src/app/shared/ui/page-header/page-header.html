@@ -8,7 +8,7 @@
   </div>
 
   @if (actionLabel()) {
-    <button mat-flat-button type="button">
+    <button mat-flat-button type="button" (click)="actionClicked.emit()">
       <mat-icon>{{ actionIcon() }}</mat-icon>
       {{ actionLabel() }}
     </button>

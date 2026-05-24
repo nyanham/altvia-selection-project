@@ -3,10 +3,13 @@
   title="Client management"
   description="Manage salon clients, contact details, notes, and appointment history entry points."
   actionLabel="Add client"
+  (actionClicked)="openCreateDialog()"
 ></app-page-header>
 
 <app-client-table
   [clients]="clients()"
   [errorMessage]="errorMessage()"
   [isLoading]="isLoading()"
+  (deleteRequested)="deleteClient($event)"
+  (editRequested)="openEditDialog($event)"
 ></app-client-table>

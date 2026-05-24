@@ -1,0 +1,16 @@
+.client-form {
+  display: grid;
+  gap: 1rem;
+  min-width: min(32rem, 75vw);
+  padding-top: 0.5rem;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+@media (width <= 640px) {
+  .client-form {
+    min-width: 0;
+  }
+}

@@ -5,4 +5,8 @@
   actionLabel="Add client"
 ></app-page-header>
 
-<app-client-table></app-client-table>
+<app-client-table
+  [clients]="clients()"
+  [errorMessage]="errorMessage()"
+  [isLoading]="isLoading()"
+></app-client-table>

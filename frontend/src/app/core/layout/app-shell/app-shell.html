@@ -37,28 +37,6 @@
   </aside>
 
   <div class="shell__workspace">
-    <header class="shell__header">
-      <div class="shell__header-copy">
-        <p class="shell__eyebrow">Operations Workspace</p>
-        <div class="shell__header-line">
-          <h2>Salon operations</h2>
-          <span class="shell__date-pill">{{ currentDateLabel }}</span>
-        </div>
-      </div>
-
-      <div class="shell__header-actions">
-        <p class="shell__status-pill">
-          <span></span>
-          Local environment active
-        </p>
-
-        <a mat-stroked-button routerLink="/appointments">
-          <mat-icon>calendar_month</mat-icon>
-          Open calendar
-        </a>
-      </div>
-    </header>
-
     <main class="shell__content">
       <router-outlet></router-outlet>
     </main>

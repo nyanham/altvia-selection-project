@@ -1,115 +1,37 @@
-<app-page-header
-  title="Dashboard"
-  actionLabel="Open calendar"
-  actionIcon="calendar_month"
-  (actionClicked)="openAppointments()"
-></app-page-header>
+<app-page-header title="Dashboard"></app-page-header>
 
-<section class="metrics-grid">
-  @for (metric of metrics; track metric.label) {
-    <mat-card class="metric-card">
-      <div class="metric-card__header">
-        <span class="metric-card__icon">
-          <mat-icon>{{ metric.icon }}</mat-icon>
+@if (isLoading()) {
+  <p class="dashboard-status">Loading live counts...</p>
+} @else if (errorMessage()) {
+  <p class="dashboard-status dashboard-status--error">{{ errorMessage() }}</p>
+}
+
+<section class="dashboard-cards">
+  @for (card of cards(); track card.route) {
+    <mat-card class="dashboard-card" [routerLink]="card.route" tabindex="0" role="link">
+      <div class="dashboard-card__header">
+        <span class="dashboard-card__icon">
+          <mat-icon>{{ card.icon }}</mat-icon>
         </span>
-        <span class="metric-card__context">{{ metric.context }}</span>
+        <mat-icon class="dashboard-card__chevron">arrow_forward</mat-icon>
       </div>
-      <strong>{{ metric.value }}</strong>
-      <p>{{ metric.label }}</p>
+
+      <div class="dashboard-card__copy">
+        <h2>{{ card.title }}</h2>
+        <p>{{ card.description }}</p>
+      </div>
+
+      <div class="dashboard-card__stats">
+        <article class="dashboard-card__stat">
+          <span>{{ card.primaryLabel }}</span>
+          <strong>{{ card.primaryValue }}</strong>
+        </article>
+
+        <article class="dashboard-card__stat">
+          <span>{{ card.secondaryLabel }}</span>
+          <strong>{{ card.secondaryValue }}</strong>
+        </article>
+      </div>
     </mat-card>
   }
-</section>
-
-<section class="dashboard-grid">
-  <div class="dashboard-grid__main">
-    <mat-card class="panel-card panel-card--agenda">
-      <div class="panel-card__header">
-        <div>
-          <p class="panel-card__eyebrow">Today</p>
-          <h2>Upcoming schedule</h2>
-        </div>
-
-        <button mat-stroked-button type="button" (click)="openAppointments()">
-          Review board
-        </button>
-      </div>
-
-      <div class="agenda-list">
-        @for (appointment of upcomingAppointments; track appointment.time + appointment.client) {
-          <article class="agenda-item" [class.is-next]="appointment.isNext">
-            <div class="agenda-item__time">{{ appointment.time }}</div>
-
-            <div class="agenda-item__content">
-              <div class="agenda-item__title-row">
-                <h3>{{ appointment.client }}</h3>
-                @if (appointment.isNext) {
-                  <span class="agenda-item__flag">Next up</span>
-                }
-              </div>
-
-              <p>{{ appointment.service }} · {{ appointment.professional }}</p>
-            </div>
-          </article>
-        }
-      </div>
-    </mat-card>
-
-    <mat-card class="panel-card">
-      <div class="panel-card__header">
-        <div>
-          <p class="panel-card__eyebrow">Attention</p>
-          <h2>Operational follow-up</h2>
-        </div>
-      </div>
-
-      <div class="alert-list">
-        @for (alert of alerts; track alert.title) {
-          <article class="alert-item">
-            <h3>{{ alert.title }}</h3>
-            <p>{{ alert.description }}</p>
-          </article>
-        }
-      </div>
-    </mat-card>
-  </div>
-
-  <aside class="dashboard-grid__aside">
-    <mat-card class="panel-card panel-card--compact">
-      <div class="panel-card__header">
-        <div>
-          <p class="panel-card__eyebrow">At a glance</p>
-          <h2>Today summary</h2>
-        </div>
-      </div>
-
-      <div class="detail-list">
-        @for (item of todaySummary; track item.label) {
-          <article class="detail-item">
-            <p class="detail-item__label">{{ item.label }}</p>
-            <h3>{{ item.value }}</h3>
-            <p>{{ item.note }}</p>
-          </article>
-        }
-      </div>
-    </mat-card>
-
-    <mat-card class="panel-card panel-card--compact">
-      <div class="panel-card__header">
-        <div>
-          <p class="panel-card__eyebrow">Demand</p>
-          <h2>Service signals</h2>
-        </div>
-      </div>
-
-      <div class="detail-list detail-list--compact">
-        @for (item of serviceSignals; track item.label) {
-          <article class="detail-item">
-            <p class="detail-item__label">{{ item.label }}</p>
-            <h3>{{ item.value }}</h3>
-            <p>{{ item.note }}</p>
-          </article>
-        }
-      </div>
-    </mat-card>
-  </aside>
 </section>

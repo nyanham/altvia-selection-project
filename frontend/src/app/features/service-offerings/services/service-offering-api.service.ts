@@ -4,7 +4,7 @@ import { apiBaseUrl, apiEndpoints } from '../../../core/config/api.config';
 import { ServiceOffering, ServiceOfferingUpsertRequest } from '../models/service-offering.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ServiceOfferingApiService {
   private readonly http = inject(HttpClient);
@@ -20,5 +20,9 @@ export class ServiceOfferingApiService {
 
   update(serviceOfferingId: number, request: ServiceOfferingUpsertRequest) {
     return this.http.put<ServiceOffering>(`${this.baseUrl}/${serviceOfferingId}`, request);
+  }
+
+  delete(serviceOfferingId: number) {
+    return this.http.delete<void>(`${this.baseUrl}/${serviceOfferingId}`);
   }
 }

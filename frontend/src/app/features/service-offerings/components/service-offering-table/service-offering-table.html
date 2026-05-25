@@ -55,6 +55,30 @@
           </td>
         </ng-container>
 
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let serviceOffering">
+            <div class="table-shell__actions">
+              <button
+                mat-icon-button
+                type="button"
+                aria-label="Edit service"
+                (click)="editRequested.emit(serviceOffering)"
+              >
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                type="button"
+                aria-label="Delete service"
+                (click)="deleteRequested.emit(serviceOffering)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>

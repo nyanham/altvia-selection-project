@@ -10,9 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageHeaderComponent {
-  readonly eyebrow = input('Workspace');
   readonly title = input.required<string>();
-  readonly description = input('');
   readonly actionLabel = input<string | null>(null);
   readonly actionIcon = input('add');
   readonly actionClicked = output<void>();

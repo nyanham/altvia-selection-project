@@ -5,10 +5,13 @@ import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/materia
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { getInterfaceLocale } from '../../../../core/config/locale.config';
 import { Client } from '../../../clients/models/client.model';
 import { Professional } from '../../../professionals/models/professional.model';
 import { ServiceOffering } from '../../../service-offerings/models/service-offering.model';
 import { Appointment, AppointmentUpsertRequest } from '../../models/appointment.model';
+
+const interfaceLocale = getInterfaceLocale();
 
 interface AppointmentFormDialogData {
   appointment: Appointment | null;
@@ -65,7 +68,7 @@ export class AppointmentFormDialogComponent {
 
     const endAt = new Date(startAt);
     endAt.setMinutes(endAt.getMinutes() + serviceOffering.durationMinutes);
-    return endAt.toLocaleString(undefined, {
+    return endAt.toLocaleString(interfaceLocale, {
       day: 'numeric',
       hour: 'numeric',
       minute: '2-digit',

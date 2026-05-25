@@ -29,7 +29,10 @@ import {
 import { AppointmentApiService } from '../../services/appointment-api.service';
 import { AppointmentStoreService } from '../../services/appointment-store.service';
 import { NotificationService } from '../../../../core/services/notification.service';
+import { getInterfaceLocale } from '../../../../core/config/locale.config';
 import { PageHeaderComponent } from '../../../../shared/ui/page-header/page-header';
+
+const interfaceLocale = getInterfaceLocale();
 
 @Component({
   selector: 'app-appointments-calendar-page',
@@ -352,18 +355,18 @@ function formatRangeLabel(startAt: string, endAt: string, view: CalendarView): s
   const endDate = new Date(endAt);
 
   if (view === 'day') {
-    return startDate.toLocaleDateString(undefined, {
+    return startDate.toLocaleDateString(interfaceLocale, {
       day: 'numeric',
       month: 'long',
       year: 'numeric',
     });
   }
 
-  const startLabel = startDate.toLocaleDateString(undefined, {
+  const startLabel = startDate.toLocaleDateString(interfaceLocale, {
     day: 'numeric',
     month: 'short',
   });
-  const endLabel = endDate.toLocaleDateString(undefined, {
+  const endLabel = endDate.toLocaleDateString(interfaceLocale, {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
@@ -373,7 +376,7 @@ function formatRangeLabel(startAt: string, endAt: string, view: CalendarView): s
 }
 
 function formatDayLabel(dateKey: string): string {
-  return new Date(`${dateKey}T00:00:00`).toLocaleDateString(undefined, {
+  return new Date(`${dateKey}T00:00:00`).toLocaleDateString(interfaceLocale, {
     day: 'numeric',
     month: 'long',
     weekday: 'long',

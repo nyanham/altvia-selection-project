@@ -2,7 +2,10 @@
   eyebrow="Professionals"
   title="Professional management"
   description="Maintain staff profiles, specialties, color coding, and future calendar capacity settings."
-  actionLabel="Add professional"
 ></app-page-header>
 
-<app-professional-table></app-professional-table>
+<app-professional-table
+  [professionals]="professionals()"
+  [errorMessage]="errorMessage()"
+  [isLoading]="isLoading()"
+></app-professional-table>

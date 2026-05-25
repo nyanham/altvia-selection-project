@@ -1,8 +1,82 @@
 <mat-card class="table-shell">
-  <app-empty-state
-    icon="badge"
-    title="Professional directory scaffolded"
-    description="Use this component for staff list, specialties, colors, and workload overview."
-    actionLabel="Add professional"
-  ></app-empty-state>
+  @if (isLoading()) {
+    <div class="table-shell__loading">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      <p>Loading professionals...</p>
+    </div>
+  } @else if (errorMessage()) {
+    <app-empty-state
+      icon="cloud_off"
+      title="Professionals could not be loaded"
+      [description]="errorMessage() ?? ''"
+    ></app-empty-state>
+  } @else if (!professionals().length) {
+    <app-empty-state
+      icon="badge"
+      title="No professionals yet"
+      description="Create your first professional to start assigning appointments."
+    ></app-empty-state>
+  } @else {
+    <div class="table-shell__summary">
+      <p>{{ professionals().length }} professionals</p>
+      <span>Sorted alphabetically by name</span>
+    </div>
+
+    <div class="table-shell__table-wrapper">
+      <table mat-table [dataSource]="professionals()">
+        <ng-container matColumnDef="fullName">
+          <th mat-header-cell *matHeaderCellDef>Professional</th>
+          <td mat-cell *matCellDef="let professional">
+            <div class="table-shell__identity">
+              <strong>{{ professional.fullName }}</strong>
+              <span>{{ professional.specialty }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="specialty">
+          <th mat-header-cell *matHeaderCellDef>Specialty</th>
+          <td mat-cell *matCellDef="let professional">{{ professional.specialty }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="phone">
+          <th mat-header-cell *matHeaderCellDef>Phone</th>
+          <td mat-cell *matCellDef="let professional">{{ professional.phone }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef>Email</th>
+          <td mat-cell *matCellDef="let professional">
+            @if (professional.email) {
+              {{ professional.email }}
+            } @else {
+              <span class="table-shell__muted">No email</span>
+            }
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="color">
+          <th mat-header-cell *matHeaderCellDef>Color</th>
+          <td mat-cell *matCellDef="let professional">
+            <div class="table-shell__color-cell">
+              <span class="table-shell__color-swatch" [style.background]="professional.colorHex"></span>
+              <span>{{ professional.colorHex }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let professional">
+            <span class="table-shell__status" [class.is-inactive]="!professional.active">
+              {{ professional.active ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  }
 </mat-card>

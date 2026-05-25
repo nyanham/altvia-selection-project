@@ -2,7 +2,10 @@
   eyebrow="Services"
   title="Service management"
   description="Maintain the salon service catalog, durations, pricing, and activation state."
-  actionLabel="Add service"
 ></app-page-header>
 
-<app-service-offering-table></app-service-offering-table>
+<app-service-offering-table
+  [serviceOfferings]="serviceOfferings()"
+  [errorMessage]="errorMessage()"
+  [isLoading]="isLoading()"
+></app-service-offering-table>

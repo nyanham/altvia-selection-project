@@ -1,8 +1,63 @@
 <mat-card class="table-shell">
-  <app-empty-state
-    icon="content_cut"
-    title="Service catalog scaffolded"
-    description="Use this component for service duration, price, and activation state management."
-    actionLabel="Add service"
-  ></app-empty-state>
+  @if (isLoading()) {
+    <div class="table-shell__loading">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      <p>Loading services...</p>
+    </div>
+  } @else if (errorMessage()) {
+    <app-empty-state
+      icon="cloud_off"
+      title="Services could not be loaded"
+      [description]="errorMessage() ?? ''"
+    ></app-empty-state>
+  } @else if (!serviceOfferings().length) {
+    <app-empty-state
+      icon="content_cut"
+      title="No services yet"
+      description="Create your first service to start building the salon catalog."
+    ></app-empty-state>
+  } @else {
+    <div class="table-shell__summary">
+      <p>{{ serviceOfferings().length }} services</p>
+      <span>Sorted alphabetically by name</span>
+    </div>
+
+    <div class="table-shell__table-wrapper">
+      <table mat-table [dataSource]="serviceOfferings()">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Service</th>
+          <td mat-cell *matCellDef="let serviceOffering">
+            <div class="table-shell__identity">
+              <strong>{{ serviceOffering.name }}</strong>
+              @if (serviceOffering.description) {
+                <span>{{ serviceOffering.description }}</span>
+              }
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="duration">
+          <th mat-header-cell *matHeaderCellDef>Duration</th>
+          <td mat-cell *matCellDef="let serviceOffering">{{ serviceOffering.durationMinutes }} min</td>
+        </ng-container>
+
+        <ng-container matColumnDef="price">
+          <th mat-header-cell *matHeaderCellDef>Price</th>
+          <td mat-cell *matCellDef="let serviceOffering">{{ serviceOffering.price | currency }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let serviceOffering">
+            <span class="table-shell__status" [class.is-inactive]="!serviceOffering.active">
+              {{ serviceOffering.active ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  }
 </mat-card>

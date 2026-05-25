@@ -1,18 +1,38 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { finalize, forkJoin } from 'rxjs';
+import { Client } from '../../../clients/models/client.model';
+import { ClientApiService } from '../../../clients/services/client-api.service';
 import { Professional } from '../../../professionals/models/professional.model';
 import { ProfessionalApiService } from '../../../professionals/services/professional-api.service';
+import { ServiceOffering } from '../../../service-offerings/models/service-offering.model';
+import { ServiceOfferingApiService } from '../../../service-offerings/services/service-offering-api.service';
 import { AppointmentScheduleBoardComponent } from '../../components/appointment-schedule-board/appointment-schedule-board';
 import { CalendarToolbarComponent } from '../../components/calendar-toolbar/calendar-toolbar';
-import { Appointment, CalendarView } from '../../models/appointment.model';
+import { AppointmentFormDialogComponent } from '../../components/appointment-form-dialog/appointment-form-dialog';
+import {
+  Appointment,
+  AppointmentStatus,
+  AppointmentUpsertRequest,
+  CalendarView,
+} from '../../models/appointment.model';
 import { AppointmentApiService } from '../../services/appointment-api.service';
 import { AppointmentStoreService } from '../../services/appointment-store.service';
+import { NotificationService } from '../../../../core/services/notification.service';
 import { PageHeaderComponent } from '../../../../shared/ui/page-header/page-header';
 
 @Component({
   selector: 'app-appointments-calendar-page',
-  imports: [AppointmentScheduleBoardComponent, CalendarToolbarComponent, PageHeaderComponent],
+  imports: [
+    AppointmentScheduleBoardComponent,
+    CalendarToolbarComponent,
+    MatDialogModule,
+    MatSnackBarModule,
+    PageHeaderComponent,
+  ],
   templateUrl: './appointments-calendar-page.html',
   styleUrl: './appointments-calendar-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -20,14 +40,20 @@ import { PageHeaderComponent } from '../../../../shared/ui/page-header/page-head
 export class AppointmentsCalendarPageComponent {
   private readonly appointmentApiService = inject(AppointmentApiService);
   private readonly appointmentStoreService = inject(AppointmentStoreService);
+  private readonly clientApiService = inject(ClientApiService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly dialog = inject(MatDialog);
+  private readonly notificationService = inject(NotificationService);
   private readonly professionalApiService = inject(ProfessionalApiService);
+  private readonly serviceOfferingApiService = inject(ServiceOfferingApiService);
   private readonly selectedDate = signal(startOfDay(new Date()));
 
   protected readonly appointments = signal<Appointment[]>([]);
+  protected readonly clients = signal<Client[]>([]);
   protected readonly errorMessage = signal<string | null>(null);
   protected readonly isLoading = signal(true);
   protected readonly professionals = signal<Professional[]>([]);
+  protected readonly serviceOfferings = signal<ServiceOffering[]>([]);
 
   protected readonly selectedProfessionalId = this.appointmentStoreService.selectedProfessionalId;
   protected readonly selectedRange = this.appointmentStoreService.selectedRange;
@@ -91,6 +117,48 @@ export class AppointmentsCalendarPageComponent {
     this.loadAppointmentsView();
   }
 
+  protected openCreateDialog(): void {
+    const dialogRef = this.dialog.open(AppointmentFormDialogComponent, {
+      width: '34rem',
+      data: {
+        appointment: null,
+        clients: this.clients(),
+        professionals: this.professionals(),
+        serviceOfferings: this.serviceOfferings(),
+      },
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((request: AppointmentUpsertRequest | undefined) => {
+        if (request) {
+          this.createAppointment(request);
+        }
+      });
+  }
+
+  protected openEditDialog(appointment: Appointment): void {
+    const dialogRef = this.dialog.open(AppointmentFormDialogComponent, {
+      width: '34rem',
+      data: {
+        appointment,
+        clients: this.clients(),
+        professionals: this.professionals(),
+        serviceOfferings: this.serviceOfferings(),
+      },
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((request: AppointmentUpsertRequest | undefined) => {
+        if (request) {
+          this.updateAppointment(appointment.id, request);
+        }
+      });
+  }
+
   protected showNextRange(): void {
     this.selectedDate.update((currentDate) => shiftRange(currentDate, this.selectedView(), 1));
     this.syncRange();
@@ -119,28 +187,85 @@ export class AppointmentsCalendarPageComponent {
     this.syncRange();
   }
 
+  protected updateAppointmentStatus(appointment: Appointment, status: AppointmentStatus): void {
+    this.appointmentApiService
+      .updateStatus(appointment.id, { status })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.notificationService.showSuccess('Appointment status updated successfully.');
+          this.loadAppointmentsView();
+        },
+        error: (error) => {
+          this.notificationService.showError(
+            extractErrorMessage(error, 'Unable to update the appointment status right now.'),
+          );
+        },
+      });
+  }
+
   private loadAppointmentsView(): void {
     this.isLoading.set(true);
     this.errorMessage.set(null);
 
     forkJoin({
       appointments: this.appointmentApiService.list(),
+      clients: this.clientApiService.list(),
       professionals: this.professionalApiService.list(),
+      serviceOfferings: this.serviceOfferingApiService.list(),
     })
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         finalize(() => this.isLoading.set(false)),
       )
       .subscribe({
-        next: ({ appointments, professionals }) => {
+        next: ({ appointments, clients, professionals, serviceOfferings }) => {
           this.appointments.set(appointments);
+          this.clients.set(clients);
           this.professionals.set(professionals);
+          this.serviceOfferings.set(serviceOfferings);
         },
         error: () => {
           this.appointments.set([]);
+          this.clients.set([]);
           this.professionals.set([]);
+          this.serviceOfferings.set([]);
           this.errorMessage.set(
             'Unable to load appointments right now. Check that the backend is running.',
+          );
+        },
+      });
+  }
+
+  private createAppointment(request: AppointmentUpsertRequest): void {
+    this.appointmentApiService
+      .create(request)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.notificationService.showSuccess('Appointment created successfully.');
+          this.loadAppointmentsView();
+        },
+        error: (error) => {
+          this.notificationService.showError(
+            extractErrorMessage(error, 'Unable to create the appointment right now.'),
+          );
+        },
+      });
+  }
+
+  private updateAppointment(appointmentId: number, request: AppointmentUpsertRequest): void {
+    this.appointmentApiService
+      .update(appointmentId, request)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.notificationService.showSuccess('Appointment updated successfully.');
+          this.loadAppointmentsView();
+        },
+        error: (error) => {
+          this.notificationService.showError(
+            extractErrorMessage(error, 'Unable to update the appointment right now.'),
           );
         },
       });
@@ -242,4 +367,12 @@ function formatDayLabel(dateKey: string): string {
     month: 'long',
     weekday: 'long',
   });
+}
+
+function extractErrorMessage(error: unknown, fallbackMessage: string): string {
+  if (error instanceof HttpErrorResponse && typeof error.error?.detail === 'string') {
+    return error.error.detail;
+  }
+
+  return fallbackMessage;
 }

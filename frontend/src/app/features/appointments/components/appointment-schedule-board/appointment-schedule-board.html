@@ -62,6 +62,35 @@
                   @if (appointment.notes) {
                     <p class="appointment-card__notes">{{ appointment.notes }}</p>
                   }
+
+                  <div class="appointment-card__actions">
+                    <button mat-stroked-button type="button" (click)="editRequested.emit(appointment)">
+                      <mat-icon>edit</mat-icon>
+                      Edit
+                    </button>
+
+                    <button
+                      mat-icon-button
+                      type="button"
+                      [matMenuTriggerFor]="statusMenu"
+                      aria-label="Change appointment status"
+                    >
+                      <mat-icon>more_vert</mat-icon>
+                    </button>
+
+                    <mat-menu #statusMenu="matMenu">
+                      @for (statusOption of statusOptions; track statusOption.value) {
+                        <button
+                          mat-menu-item
+                          type="button"
+                          [disabled]="appointment.status === statusOption.value"
+                          (click)="statusRequested.emit({ appointment, status: statusOption.value })"
+                        >
+                          {{ statusOption.label }}
+                        </button>
+                      }
+                    </mat-menu>
+                  </div>
                 </div>
               </article>
             }

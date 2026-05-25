@@ -1,0 +1,21 @@
+.appointment-form {
+  display: grid;
+  gap: 1rem;
+  min-width: min(32rem, 75vw);
+  padding-top: 0.5rem;
+}
+
+.appointment-form__helper {
+  margin: 0 0 0.75rem;
+  color: #52607a;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+@media (width <= 640px) {
+  .appointment-form {
+    min-width: 0;
+  }
+}

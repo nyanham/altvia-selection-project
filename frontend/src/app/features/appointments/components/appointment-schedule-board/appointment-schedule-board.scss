@@ -130,6 +130,13 @@
   gap: 0.5rem;
 }
 
+.appointment-card__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
 .appointment-card__professional-dot {
   width: 0.75rem;
   height: 0.75rem;
@@ -147,5 +154,9 @@
   .appointment-card__header {
     grid-template-columns: 1fr;
     display: grid;
+  }
+
+  .appointment-card__actions {
+    justify-content: stretch;
   }
 }

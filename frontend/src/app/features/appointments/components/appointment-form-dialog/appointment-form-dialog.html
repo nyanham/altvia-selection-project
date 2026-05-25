@@ -1,0 +1,88 @@
+<h2 mat-dialog-title>{{ isEditMode ? 'Edit appointment' : 'New appointment' }}</h2>
+
+<mat-dialog-content>
+  @if (!canSchedule) {
+    <p class="appointment-form__helper">
+      Add at least one client, professional, and service before scheduling appointments.
+    </p>
+  }
+
+  <form class="appointment-form" [formGroup]="form">
+    <mat-form-field appearance="outline">
+      <mat-label>Client</mat-label>
+      <mat-select formControlName="clientId" aria-label="Client">
+        @for (client of clients; track client.id) {
+          <mat-option [value]="client.id">{{ client.fullName }}</mat-option>
+        }
+      </mat-select>
+      @if (form.controls.clientId.hasError('min')) {
+        <mat-error>Client is required.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Professional</mat-label>
+      <mat-select formControlName="professionalId" aria-label="Professional">
+        @for (professional of professionals; track professional.id) {
+          <mat-option [value]="professional.id">{{ professional.fullName }}</mat-option>
+        }
+      </mat-select>
+      @if (form.controls.professionalId.hasError('min')) {
+        <mat-error>Professional is required.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Service</mat-label>
+      <mat-select formControlName="serviceOfferingId" aria-label="Service">
+        @for (serviceOffering of serviceOfferings; track serviceOffering.id) {
+          <mat-option [value]="serviceOffering.id">
+            {{ serviceOffering.name }} · {{ serviceOffering.durationMinutes }} min
+          </mat-option>
+        }
+      </mat-select>
+      @if (form.controls.serviceOfferingId.hasError('min')) {
+        <mat-error>Service is required.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Start time</mat-label>
+      <input
+        matInput
+        type="datetime-local"
+        formControlName="startAt"
+        aria-label="Start time"
+        placeholder="Start time"
+      />
+      @if (form.controls.startAt.hasError('required')) {
+        <mat-error>Start time is required.</mat-error>
+      }
+    </mat-form-field>
+
+    @if (endAtPreview) {
+      <p class="appointment-form__helper">Expected end time: {{ endAtPreview }}</p>
+    }
+
+    <mat-form-field appearance="outline">
+      <mat-label>Notes</mat-label>
+      <textarea
+        matInput
+        formControlName="notes"
+        rows="4"
+        aria-label="Notes"
+        placeholder="Notes"
+      ></textarea>
+      @if (form.controls.notes.hasError('maxlength')) {
+        <mat-error>Notes must have at most 500 characters.</mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="close()">Cancel</button>
+  <button mat-flat-button type="button" [disabled]="!canSchedule" (click)="save()">
+    {{ isEditMode ? 'Save changes' : 'Create appointment' }}
+  </button>
+</mat-dialog-actions>

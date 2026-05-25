@@ -3,6 +3,8 @@ export interface AppointmentSummary {
   fullName: string;
 }
 
+export type AppointmentStatus = 'SCHEDULED' | 'COMPLETED' | 'CANCELED' | 'NO_SHOW';
+
 export interface ProfessionalSummary {
   id: number;
   fullName: string;
@@ -23,10 +25,22 @@ export interface Appointment {
   serviceOffering: ServiceOfferingSummary;
   startAt: string;
   endAt: string;
-  status: 'SCHEDULED' | 'COMPLETED' | 'CANCELED' | 'NO_SHOW';
+  status: AppointmentStatus;
   notes: string | null;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface AppointmentUpsertRequest {
+  clientId: number;
+  professionalId: number;
+  serviceOfferingId: number;
+  startAt: string;
+  notes: string | null;
+}
+
+export interface AppointmentStatusUpdateRequest {
+  status: AppointmentStatus;
 }
 
 export type CalendarView = 'day' | 'week';

@@ -1,0 +1,25 @@
+.professional-form {
+  display: grid;
+  gap: 1rem;
+  min-width: min(32rem, 75vw);
+  padding-top: 0.5rem;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.professional-form__color-preview {
+  display: inline-flex;
+  width: 1rem;
+  height: 1rem;
+  margin-left: 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(27, 39, 64, 0.12);
+}
+
+@media (width <= 640px) {
+  .professional-form {
+    min-width: 0;
+  }
+}

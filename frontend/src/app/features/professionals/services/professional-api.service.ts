@@ -4,7 +4,7 @@ import { apiBaseUrl, apiEndpoints } from '../../../core/config/api.config';
 import { Professional, ProfessionalUpsertRequest } from '../models/professional.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProfessionalApiService {
   private readonly http = inject(HttpClient);
@@ -20,5 +20,9 @@ export class ProfessionalApiService {
 
   update(professionalId: number, request: ProfessionalUpsertRequest) {
     return this.http.put<Professional>(`${this.baseUrl}/${professionalId}`, request);
+  }
+
+  delete(professionalId: number) {
+    return this.http.delete<void>(`${this.baseUrl}/${professionalId}`);
   }
 }

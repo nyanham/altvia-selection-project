@@ -82,19 +82,6 @@ export class AppointmentsCalendarPageComponent {
     return formatRangeLabel(range.startAt, range.endAt, this.selectedView());
   });
 
-  protected readonly selectedProfessionalName = computed(() => {
-    const selectedProfessionalId = this.selectedProfessionalId();
-
-    if (selectedProfessionalId === null) {
-      return 'All professionals';
-    }
-
-    return (
-      this.professionals().find((professional) => professional.id === selectedProfessionalId)?.fullName ??
-      'Selected professional'
-    );
-  });
-
   protected readonly visibleAppointments = computed(() => {
     const range = this.selectedRange();
 
@@ -115,37 +102,6 @@ export class AppointmentsCalendarPageComponent {
         return appointmentInRange && matchesProfessional;
       })
       .sort((left, right) => left.startAt.localeCompare(right.startAt));
-  });
-
-  protected readonly appointmentStats = computed(() => {
-    const appointments = this.visibleAppointments();
-
-    return {
-      total: appointments.length,
-      scheduled: appointments.filter((appointment) => appointment.status === 'SCHEDULED').length,
-      completed: appointments.filter((appointment) => appointment.status === 'COMPLETED').length,
-      attention: appointments.filter(
-        (appointment) => appointment.status === 'CANCELED' || appointment.status === 'NO_SHOW',
-      ).length,
-    };
-  });
-
-  protected readonly planningMessage = computed(() => {
-    const stats = this.appointmentStats();
-
-    if (!stats.total) {
-      return 'No appointments are visible in this range yet. Create a booking or broaden the current filter.';
-    }
-
-    if (stats.attention > 0) {
-      return 'There are canceled or no-show visits in this range. Review them before the board gets busier.';
-    }
-
-    if (stats.total < 4) {
-      return 'The schedule is still light. There is room to add bookings without crowding the day.';
-    }
-
-    return 'The board is healthy for this range. Use the professional filter to balance workload when needed.';
   });
 
   protected readonly appointmentGroups = computed(() => {

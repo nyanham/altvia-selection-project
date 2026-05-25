@@ -13,6 +13,7 @@ import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -70,5 +71,11 @@ public class AppointmentController {
             @PathVariable @Positive Long id,
             @Valid @RequestBody AppointmentStatusUpdateRequest request) {
         return ResponseEntity.ok(appointmentService.updateStatus(id, request));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable @Positive Long id) {
+        appointmentService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

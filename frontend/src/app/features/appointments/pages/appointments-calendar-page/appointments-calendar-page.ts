@@ -171,6 +171,38 @@ export class AppointmentsCalendarPageComponent {
       });
   }
 
+  protected deleteAppointment(appointment: Appointment): void {
+    const confirmed = window.confirm(
+      `Delete appointment for "${appointment.client.fullName}" on ${new Date(
+        appointment.startAt,
+      ).toLocaleString(interfaceLocale, {
+        day: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        month: 'short',
+      })}?`,
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.appointmentApiService
+      .delete(appointment.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.notificationService.showSuccess('Appointment deleted successfully.');
+          this.loadAppointmentsView();
+        },
+        error: (error) => {
+          this.notificationService.showError(
+            extractErrorMessage(error, 'Unable to delete the appointment right now.'),
+          );
+        },
+      });
+  }
+
   protected showNextRange(): void {
     this.selectedDate.update((currentDate) => shiftRange(currentDate, this.selectedView(), 1));
     this.syncRange();

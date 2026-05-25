@@ -32,6 +32,7 @@ export class AppointmentScheduleBoardComponent {
   readonly isLoading = input(false);
   readonly rangeLabel = input('');
 
+  readonly deleteRequested = output<Appointment>();
   readonly editRequested = output<Appointment>();
   readonly statusRequested = output<{ appointment: Appointment; status: AppointmentStatus }>();
 

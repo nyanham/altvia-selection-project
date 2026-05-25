@@ -40,4 +40,8 @@ export class AppointmentApiService {
   updateStatus(appointmentId: number, request: AppointmentStatusUpdateRequest) {
     return this.http.patch<Appointment>(`${this.baseUrl}/${appointmentId}/status`, request);
   }
+
+  delete(appointmentId: number) {
+    return this.http.delete<void>(`${this.baseUrl}/${appointmentId}`);
+  }
 }

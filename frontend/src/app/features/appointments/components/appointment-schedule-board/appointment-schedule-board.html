@@ -92,6 +92,11 @@
                             {{ statusOption.label }}
                           </button>
                         }
+
+                        <button mat-menu-item type="button" (click)="deleteRequested.emit(appointment)">
+                          <mat-icon>delete</mat-icon>
+                          <span>Delete appointment</span>
+                        </button>
                       </mat-menu>
                     </div>
                   </div>

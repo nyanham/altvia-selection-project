@@ -22,6 +22,7 @@
   [errorMessage]="errorMessage()"
   [isLoading]="isLoading()"
   [rangeLabel]="rangeLabel()"
+  (deleteRequested)="deleteAppointment($event)"
   (editRequested)="openEditDialog($event)"
   (statusRequested)="updateAppointmentStatus($event.appointment, $event.status)"
 ></app-appointment-schedule-board>

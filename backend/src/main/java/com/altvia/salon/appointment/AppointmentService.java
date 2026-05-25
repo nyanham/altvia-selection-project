@@ -109,6 +109,11 @@ public class AppointmentService {
         return AppointmentMapper.toResponse(appointment);
     }
 
+    @Transactional
+    public void delete(Long id) {
+        appointmentRepository.delete(findAppointment(id));
+    }
+
     private void validateNoConflict(
             Long professionalId,
             Long appointmentId,

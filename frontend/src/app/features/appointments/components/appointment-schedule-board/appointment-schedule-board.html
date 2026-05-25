@@ -1,0 +1,73 @@
+<mat-card class="schedule-board">
+  @if (isLoading()) {
+    <div class="schedule-board__loading">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      <p>Loading appointments...</p>
+    </div>
+  } @else if (errorMessage()) {
+    <app-empty-state
+      icon="cloud_off"
+      title="Appointments could not be loaded"
+      [description]="errorMessage() ?? ''"
+    ></app-empty-state>
+  } @else if (!appointmentGroups().length) {
+    <app-empty-state
+      icon="calendar_month"
+      title="No appointments in this range"
+      [description]="'Nothing is scheduled for ' + rangeLabel() + '.'"
+    ></app-empty-state>
+  } @else {
+    <div class="schedule-board__summary">
+      <p>{{ totalAppointments() }} appointments</p>
+      <span>{{ rangeLabel() }}</span>
+    </div>
+
+    <div class="schedule-board__groups">
+      @for (group of appointmentGroups(); track group.key) {
+        <section class="schedule-group">
+          <header class="schedule-group__header">
+            <h2>{{ group.label }}</h2>
+            <span>{{ group.appointments.length }} scheduled</span>
+          </header>
+
+          <div class="schedule-group__list">
+            @for (appointment of group.appointments; track appointment.id) {
+              <article class="appointment-card">
+                <div class="appointment-card__time">
+                  <strong>{{ appointment.startAt | date: 'shortTime' }}</strong>
+                  <span>{{ appointment.endAt | date: 'shortTime' }}</span>
+                </div>
+
+                <div class="appointment-card__content">
+                  <div class="appointment-card__header">
+                    <div>
+                      <h3>{{ appointment.client.fullName }}</h3>
+                      <p>
+                        {{ appointment.serviceOffering.name }}
+                        · {{ appointment.serviceOffering.durationMinutes }} min
+                        · {{ appointment.serviceOffering.price | currency }}
+                      </p>
+                    </div>
+
+                    <span class="appointment-card__status" [class.is-canceled]="appointment.status === 'CANCELED'" [class.is-completed]="appointment.status === 'COMPLETED'" [class.is-no-show]="appointment.status === 'NO_SHOW'">
+                      {{ appointment.status.replace('_', ' ') }}
+                    </span>
+                  </div>
+
+                  <div class="appointment-card__meta">
+                    <span class="appointment-card__professional-dot" [style.background]="appointment.professional.colorHex"></span>
+                    <span>{{ appointment.professional.fullName }}</span>
+                  </div>
+
+                  @if (appointment.notes) {
+                    <p class="appointment-card__notes">{{ appointment.notes }}</p>
+                  }
+                </div>
+              </article>
+            }
+          </div>
+        </section>
+      }
+    </div>
+  }
+</mat-card>

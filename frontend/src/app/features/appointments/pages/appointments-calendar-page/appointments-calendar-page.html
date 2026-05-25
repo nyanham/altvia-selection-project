@@ -1,17 +1,24 @@
 <app-page-header
   eyebrow="Scheduling"
   title="Appointments calendar"
-  description="Use this page for the calendar grid, professional filters, and appointment creation flow."
-  actionLabel="New appointment"
-  actionIcon="add_circle"
+  description="Review live appointments by range, filter by professional, and prepare the scheduling flow."
 ></app-page-header>
 
-<app-calendar-toolbar></app-calendar-toolbar>
+<app-calendar-toolbar
+  [professionals]="professionalOptions()"
+  [rangeLabel]="rangeLabel()"
+  [selectedProfessionalId]="selectedProfessionalId()"
+  [selectedView]="selectedView()"
+  (nextRequested)="showNextRange()"
+  (previousRequested)="showPreviousRange()"
+  (professionalChanged)="updateProfessionalFilter($event)"
+  (todayRequested)="showToday()"
+  (viewChanged)="updateView($event)"
+></app-calendar-toolbar>
 
-<mat-card class="calendar-surface">
-  <app-empty-state
-    icon="calendar_month"
-    title="Calendar surface scaffolded"
-    description="Connect this page to appointment-api.service and appointment-store.service when implementing scheduling interactions."
-  ></app-empty-state>
-</mat-card>
+<app-appointment-schedule-board
+  [appointmentGroups]="appointmentGroups()"
+  [errorMessage]="errorMessage()"
+  [isLoading]="isLoading()"
+  [rangeLabel]="rangeLabel()"
+></app-appointment-schedule-board>

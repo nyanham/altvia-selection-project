@@ -1,22 +1,44 @@
 <div class="calendar-toolbar">
   <div class="calendar-toolbar__group">
-    <button mat-stroked-button type="button">
+    <button mat-stroked-button type="button" (click)="todayRequested.emit()">
       <mat-icon>today</mat-icon>
       Today
     </button>
 
-    <button mat-icon-button type="button" aria-label="Previous period">
+    <button mat-icon-button type="button" aria-label="Previous period" (click)="previousRequested.emit()">
       <mat-icon>chevron_left</mat-icon>
     </button>
 
-    <button mat-icon-button type="button" aria-label="Next period">
+    <button mat-icon-button type="button" aria-label="Next period" (click)="nextRequested.emit()">
       <mat-icon>chevron_right</mat-icon>
     </button>
+
+    <p class="calendar-toolbar__range">{{ rangeLabel() }}</p>
   </div>
 
-  <div class="calendar-toolbar__group">
+  <div class="calendar-toolbar__group calendar-toolbar__group--controls">
+    <mat-form-field class="calendar-toolbar__filter" appearance="outline" subscriptSizing="dynamic">
+      <mat-label>Professional</mat-label>
+      <mat-select
+        [value]="selectedProfessionalId()"
+        (valueChange)="professionalChanged.emit($event ?? null)"
+      >
+        <mat-option [value]="null">All professionals</mat-option>
+        @for (professional of professionals(); track professional.id) {
+          <mat-option [value]="professional.id">{{ professional.fullName }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
     @for (view of views; track view) {
-      <button mat-stroked-button type="button">{{ view }}</button>
+      <button
+        mat-stroked-button
+        type="button"
+        [class.is-active]="selectedView() === view.value"
+        (click)="viewChanged.emit(view.value)"
+      >
+        {{ view.label }}
+      </button>
     }
   </div>
 </div>

@@ -23,4 +23,9 @@ import { primaryNavigation } from '../../config/navigation.config';
 })
 export class AppShellComponent {
   protected readonly navigationItems = primaryNavigation;
+  protected readonly currentDateLabel = new Intl.DateTimeFormat(undefined, {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+  }).format(new Date());
 }

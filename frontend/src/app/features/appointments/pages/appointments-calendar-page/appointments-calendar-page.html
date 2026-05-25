@@ -7,23 +7,70 @@
   (actionClicked)="openCreateDialog()"
 ></app-page-header>
 
-<app-calendar-toolbar
-  [professionals]="professionalOptions()"
-  [rangeLabel]="rangeLabel()"
-  [selectedProfessionalId]="selectedProfessionalId()"
-  [selectedView]="selectedView()"
-  (nextRequested)="showNextRange()"
-  (previousRequested)="showPreviousRange()"
-  (professionalChanged)="updateProfessionalFilter($event)"
-  (todayRequested)="showToday()"
-  (viewChanged)="updateView($event)"
-></app-calendar-toolbar>
+<section class="appointments-overview">
+  <article class="overview-card overview-card--emphasis">
+    <p class="overview-card__label">Visible appointments</p>
+    <strong>{{ appointmentStats().total }}</strong>
+    <span>{{ selectedProfessionalName() }} · {{ selectedView() === 'day' ? 'Day view' : 'Week view' }}</span>
+  </article>
 
-<app-appointment-schedule-board
-  [appointmentGroups]="appointmentGroups()"
-  [errorMessage]="errorMessage()"
-  [isLoading]="isLoading()"
-  [rangeLabel]="rangeLabel()"
-  (editRequested)="openEditDialog($event)"
-  (statusRequested)="updateAppointmentStatus($event.appointment, $event.status)"
-></app-appointment-schedule-board>
+  <article class="overview-card">
+    <p class="overview-card__label">Scheduled</p>
+    <strong>{{ appointmentStats().scheduled }}</strong>
+    <span>Active visits in {{ rangeLabel() }}</span>
+  </article>
+
+  <article class="overview-card">
+    <p class="overview-card__label">Completed</p>
+    <strong>{{ appointmentStats().completed }}</strong>
+    <span>Closed visits in this range</span>
+  </article>
+
+  <article class="overview-card">
+    <p class="overview-card__label">Needs attention</p>
+    <strong>{{ appointmentStats().attention }}</strong>
+    <span>Canceled or no-show visits</span>
+  </article>
+</section>
+
+<section class="appointments-layout">
+  <div class="appointments-layout__main">
+    <app-calendar-toolbar
+      [professionals]="professionalOptions()"
+      [rangeLabel]="rangeLabel()"
+      [selectedProfessionalId]="selectedProfessionalId()"
+      [selectedView]="selectedView()"
+      (nextRequested)="showNextRange()"
+      (previousRequested)="showPreviousRange()"
+      (professionalChanged)="updateProfessionalFilter($event)"
+      (todayRequested)="showToday()"
+      (viewChanged)="updateView($event)"
+    ></app-calendar-toolbar>
+
+    <app-appointment-schedule-board
+      [appointmentGroups]="appointmentGroups()"
+      [errorMessage]="errorMessage()"
+      [isLoading]="isLoading()"
+      [rangeLabel]="rangeLabel()"
+      (editRequested)="openEditDialog($event)"
+      (statusRequested)="updateAppointmentStatus($event.appointment, $event.status)"
+    ></app-appointment-schedule-board>
+  </div>
+
+  <aside class="appointments-sidebar">
+    <section class="sidebar-card">
+      <p class="sidebar-card__eyebrow">Planning focus</p>
+      <h2>{{ selectedProfessionalName() }}</h2>
+      <p>{{ planningMessage() }}</p>
+    </section>
+
+    <section class="sidebar-card sidebar-card--muted">
+      <p class="sidebar-card__eyebrow">Booking guidance</p>
+      <ul>
+        <li>Use quick edits for time changes and note updates.</li>
+        <li>Week view is better for balancing longer services.</li>
+        <li>Review canceled and no-show visits before opening new slots.</li>
+      </ul>
+    </section>
+  </aside>
+</section>

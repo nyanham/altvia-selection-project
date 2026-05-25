@@ -1,4 +1,115 @@
 :host {
   display: grid;
+  gap: 1.5rem;
+}
+
+.appointments-overview {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1rem;
+}
+
+.overview-card,
+.sidebar-card,
+.appointments-layout__main {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.overview-card {
+  padding: 1.1rem 1.2rem;
+  border-radius: 1.35rem;
+  border: 1px solid var(--app-border);
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: var(--app-shadow-sm);
+}
+
+.overview-card--emphasis {
+  background: linear-gradient(180deg, rgba(220, 236, 232, 0.96), rgba(255, 255, 255, 0.92));
+  border-color: rgba(31, 107, 99, 0.2);
+}
+
+.overview-card__label,
+.sidebar-card__eyebrow {
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--app-primary-strong);
+}
+
+.overview-card strong {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--app-title);
+}
+
+.overview-card span,
+.sidebar-card p,
+.sidebar-card li {
+  color: var(--app-text-muted);
+  line-height: 1.55;
+}
+
+.appointments-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 18rem;
+  gap: 1rem;
+  align-items: start;
+}
+
+.appointments-layout__main {
+  min-width: 0;
+}
+
+.appointments-sidebar {
+  display: grid;
+  gap: 1rem;
+  position: sticky;
+  top: 1.5rem;
+}
+
+.sidebar-card {
+  padding: 1.25rem;
+  border-radius: 1.4rem;
+  border: 1px solid var(--app-border);
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: var(--app-shadow-sm);
+}
+
+.sidebar-card h2 {
+  font-size: 1.25rem;
+}
+
+.sidebar-card--muted {
+  background: linear-gradient(180deg, rgba(249, 247, 242, 0.96), rgba(244, 239, 229, 0.92));
+}
+
+.sidebar-card ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.65rem;
+}
+
+@media (width <= 1080px) {
+  .appointments-overview {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .appointments-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .appointments-sidebar {
+    position: static;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (width <= 640px) {
+  .appointments-overview,
+  .appointments-sidebar {
+    grid-template-columns: 1fr;
+  }
 }

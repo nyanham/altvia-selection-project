@@ -1,5 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectionStrategy, Component, DestroyRef, computed, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -75,17 +82,30 @@ export class AppointmentsCalendarPageComponent {
     return formatRangeLabel(range.startAt, range.endAt, this.selectedView());
   });
 
-  protected readonly appointmentGroups = computed(() => {
+  protected readonly selectedProfessionalName = computed(() => {
+    const selectedProfessionalId = this.selectedProfessionalId();
+
+    if (selectedProfessionalId === null) {
+      return 'All professionals';
+    }
+
+    return (
+      this.professionals().find((professional) => professional.id === selectedProfessionalId)?.fullName ??
+      'Selected professional'
+    );
+  });
+
+  protected readonly visibleAppointments = computed(() => {
     const range = this.selectedRange();
 
     if (!range) {
-      return [];
+      return [] as Appointment[];
     }
 
     const startAt = new Date(range.startAt);
     const endAt = new Date(range.endAt);
     const selectedProfessionalId = this.selectedProfessionalId();
-    const filteredAppointments = this.appointments()
+    return this.appointments()
       .filter((appointment) => {
         const appointmentStartAt = new Date(appointment.startAt);
         const appointmentInRange = appointmentStartAt >= startAt && appointmentStartAt <= endAt;
@@ -95,10 +115,43 @@ export class AppointmentsCalendarPageComponent {
         return appointmentInRange && matchesProfessional;
       })
       .sort((left, right) => left.startAt.localeCompare(right.startAt));
+  });
 
+  protected readonly appointmentStats = computed(() => {
+    const appointments = this.visibleAppointments();
+
+    return {
+      total: appointments.length,
+      scheduled: appointments.filter((appointment) => appointment.status === 'SCHEDULED').length,
+      completed: appointments.filter((appointment) => appointment.status === 'COMPLETED').length,
+      attention: appointments.filter(
+        (appointment) => appointment.status === 'CANCELED' || appointment.status === 'NO_SHOW',
+      ).length,
+    };
+  });
+
+  protected readonly planningMessage = computed(() => {
+    const stats = this.appointmentStats();
+
+    if (!stats.total) {
+      return 'No appointments are visible in this range yet. Create a booking or broaden the current filter.';
+    }
+
+    if (stats.attention > 0) {
+      return 'There are canceled or no-show visits in this range. Review them before the board gets busier.';
+    }
+
+    if (stats.total < 4) {
+      return 'The schedule is still light. There is room to add bookings without crowding the day.';
+    }
+
+    return 'The board is healthy for this range. Use the professional filter to balance workload when needed.';
+  });
+
+  protected readonly appointmentGroups = computed(() => {
     const appointmentGroups = new Map<string, Appointment[]>();
 
-    for (const appointment of filteredAppointments) {
+    for (const appointment of this.visibleAppointments()) {
       const key = appointment.startAt.slice(0, 10);
       const currentAppointments = appointmentGroups.get(key) ?? [];
       currentAppointments.push(appointment);
@@ -323,17 +376,19 @@ function addDays(date: Date, amount: number): Date {
 }
 
 function toLocalDateTime(date: Date): string {
-  return [
-    date.getFullYear().toString().padStart(4, '0'),
-    (date.getMonth() + 1).toString().padStart(2, '0'),
-    date.getDate().toString().padStart(2, '0'),
-  ].join('-') +
+  return (
+    [
+      date.getFullYear().toString().padStart(4, '0'),
+      (date.getMonth() + 1).toString().padStart(2, '0'),
+      date.getDate().toString().padStart(2, '0'),
+    ].join('-') +
     'T' +
     [
       date.getHours().toString().padStart(2, '0'),
       date.getMinutes().toString().padStart(2, '0'),
       date.getSeconds().toString().padStart(2, '0'),
-    ].join(':');
+    ].join(':')
+  );
 }
 
 function formatRangeLabel(startAt: string, endAt: string, view: CalendarView): string {

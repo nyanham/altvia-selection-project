@@ -18,7 +18,10 @@
     ></app-empty-state>
   } @else {
     <div class="schedule-board__summary">
-      <p>{{ totalAppointments() }} appointments</p>
+      <div>
+        <p class="schedule-board__eyebrow">Calendar snapshot</p>
+        <strong>{{ totalAppointments() }} appointments</strong>
+      </div>
       <span>{{ rangeLabel() }}</span>
     </div>
 
@@ -26,8 +29,11 @@
       @for (group of appointmentGroups(); track group.key) {
         <section class="schedule-group">
           <header class="schedule-group__header">
-            <h2>{{ group.label }}</h2>
-            <span>{{ group.appointments.length }} scheduled</span>
+            <div>
+              <p class="schedule-group__eyebrow">Day plan</p>
+              <h2>{{ group.label }}</h2>
+            </div>
+            <span>{{ group.appointments.length }} appointments</span>
           </header>
 
           <div class="schedule-group__list">
@@ -42,7 +48,7 @@
                   <div class="appointment-card__header">
                     <div>
                       <h3>{{ appointment.client.fullName }}</h3>
-                      <p>
+                      <p class="appointment-card__service-line">
                         {{ appointment.serviceOffering.name }}
                         · {{ appointment.serviceOffering.durationMinutes }} min
                         · {{ appointment.serviceOffering.price | currency }}
@@ -54,43 +60,45 @@
                     </span>
                   </div>
 
-                  <div class="appointment-card__meta">
-                    <span class="appointment-card__professional-dot" [style.background]="appointment.professional.colorHex"></span>
-                    <span>{{ appointment.professional.fullName }}</span>
+                  <div class="appointment-card__footer">
+                    <div class="appointment-card__meta">
+                      <span class="appointment-card__professional-dot" [style.background]="appointment.professional.colorHex"></span>
+                      <span>{{ appointment.professional.fullName }}</span>
+                    </div>
+
+                    <div class="appointment-card__actions">
+                      <button mat-stroked-button type="button" (click)="editRequested.emit(appointment)">
+                        <mat-icon>edit</mat-icon>
+                        Edit
+                      </button>
+
+                      <button
+                        mat-icon-button
+                        type="button"
+                        [matMenuTriggerFor]="statusMenu"
+                        aria-label="Change appointment status"
+                      >
+                        <mat-icon>more_vert</mat-icon>
+                      </button>
+
+                      <mat-menu #statusMenu="matMenu">
+                        @for (statusOption of statusOptions; track statusOption.value) {
+                          <button
+                            mat-menu-item
+                            type="button"
+                            [disabled]="appointment.status === statusOption.value"
+                            (click)="statusRequested.emit({ appointment, status: statusOption.value })"
+                          >
+                            {{ statusOption.label }}
+                          </button>
+                        }
+                      </mat-menu>
+                    </div>
                   </div>
 
                   @if (appointment.notes) {
                     <p class="appointment-card__notes">{{ appointment.notes }}</p>
                   }
-
-                  <div class="appointment-card__actions">
-                    <button mat-stroked-button type="button" (click)="editRequested.emit(appointment)">
-                      <mat-icon>edit</mat-icon>
-                      Edit
-                    </button>
-
-                    <button
-                      mat-icon-button
-                      type="button"
-                      [matMenuTriggerFor]="statusMenu"
-                      aria-label="Change appointment status"
-                    >
-                      <mat-icon>more_vert</mat-icon>
-                    </button>
-
-                    <mat-menu #statusMenu="matMenu">
-                      @for (statusOption of statusOptions; track statusOption.value) {
-                        <button
-                          mat-menu-item
-                          type="button"
-                          [disabled]="appointment.status === statusOption.value"
-                          (click)="statusRequested.emit({ appointment, status: statusOption.value })"
-                        >
-                          {{ statusOption.label }}
-                        </button>
-                      }
-                    </mat-menu>
-                  </div>
                 </div>
               </article>
             }

@@ -1,39 +1,170 @@
-// Include theming for Angular Material with `mat.theme()`.
-// This Sass mixin will define CSS variables that are used for styling Angular Material
-// components according to the Material 3 design spec.
-// Learn more about theming and how to use it for your application's
-// custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
+
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
 
 html {
   height: 100%;
+  scroll-behavior: smooth;
   @include mat.theme(
     (
       color: (
         primary: mat.$azure-palette,
         tertiary: mat.$blue-palette,
       ),
-      typography: Roboto,
-      density: 0,
+      typography: Manrope,
+      density: -1,
     )
   );
 }
 
+:root {
+  --app-font-family: 'Manrope', 'Segoe UI', sans-serif;
+  --app-bg: #f6f4ef;
+  --app-bg-strong: #efeade;
+  --app-surface: rgba(255, 255, 255, 0.88);
+  --app-surface-strong: #ffffff;
+  --app-surface-muted: #f3efe5;
+  --app-border: rgba(47, 56, 66, 0.12);
+  --app-border-strong: rgba(47, 56, 66, 0.2);
+  --app-text: #1f2430;
+  --app-text-muted: #5f6773;
+  --app-title: #171c25;
+  --app-primary: #1f6b63;
+  --app-primary-strong: #174e49;
+  --app-primary-soft: rgba(31, 107, 99, 0.12);
+  --app-accent: #d98c6b;
+  --app-success: #2f7d5b;
+  --app-warning: #b56b3a;
+  --app-danger: #a6483f;
+  --app-shadow-sm: 0 14px 32px rgba(28, 34, 44, 0.08);
+  --app-shadow-md: 0 24px 60px rgba(28, 34, 44, 0.14);
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+
+  --mat-sys-primary: var(--app-primary);
+  --mat-sys-on-primary: #ffffff;
+  --mat-sys-primary-container: #dcece8;
+  --mat-sys-on-primary-container: var(--app-primary-strong);
+  --mat-sys-secondary-container: #f4e4dc;
+  --mat-sys-on-secondary-container: #7b4a34;
+  --mat-sys-surface: var(--app-bg);
+  --mat-sys-surface-container: #fbf8f2;
+  --mat-sys-surface-container-low: rgba(255, 255, 255, 0.72);
+  --mat-sys-surface-container-high: #ffffff;
+  --mat-sys-surface-container-highest: #ffffff;
+  --mat-sys-surface-variant: var(--app-surface-muted);
+  --mat-sys-on-surface: var(--app-text);
+  --mat-sys-on-surface-variant: var(--app-text-muted);
+  --mat-sys-outline: var(--app-border-strong);
+  --mat-sys-outline-variant: var(--app-border);
+  --mat-sys-error: var(--app-danger);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+  font-family: var(--app-font-family);
+}
+
 body {
-  // Default the application to a light color theme. This can be changed to
-  // `dark` to enable the dark color theme, or to `light dark` to defer to the
-  // user's system settings.
   color-scheme: light;
-
-  // Set a default background, font and text colors for the application using
-  // Angular Material's system-level CSS variables. Learn more about these
-  // variables at https://material.angular.dev/guide/system-variables
-  background-color: var(--mat-sys-surface);
-  color: var(--mat-sys-on-surface);
-  font: var(--mat-sys-body-medium);
-
-  // Reset the user agent margin.
+  min-width: 320px;
   margin: 0;
   height: 100%;
+  background:
+    radial-gradient(circle at top left, rgba(217, 140, 107, 0.16), transparent 28%),
+    radial-gradient(circle at top right, rgba(31, 107, 99, 0.1), transparent 24%),
+    linear-gradient(180deg, #f8f5ee 0%, #f1ece2 100%);
+  color: var(--app-text);
+  font: var(--mat-sys-body-medium);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
-/* You can add global styles to this file, and also import other style files */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  color: var(--app-title);
+  letter-spacing: -0.03em;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: rgba(31, 107, 99, 0.18);
+}
+
+.mat-mdc-card {
+  border-radius: 1.5rem !important;
+  border: 1px solid var(--app-border);
+  background: var(--app-surface-strong);
+  box-shadow: var(--app-shadow-sm) !important;
+}
+
+.mat-mdc-unelevated-button:not(:disabled) {
+  background: var(--app-primary) !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+.mat-mdc-outlined-button:not(:disabled) {
+  border-color: var(--app-border-strong) !important;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--app-text) !important;
+}
+
+.mat-mdc-icon-button {
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid var(--app-border);
+}
+
+.mat-mdc-form-field {
+  --mdc-outlined-text-field-container-shape: 1rem;
+  --mdc-outlined-text-field-outline-color: var(--app-border-strong);
+  --mdc-outlined-text-field-hover-outline-color: var(--app-primary);
+  --mdc-outlined-text-field-focus-outline-color: var(--app-primary);
+  --mat-form-field-container-text-size: 0.95rem;
+}
+
+.mat-mdc-dialog-surface,
+.mat-mdc-menu-panel {
+  border-radius: 1.25rem !important;
+  border: 1px solid var(--app-border);
+  box-shadow: var(--app-shadow-md) !important;
+}
+
+.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  border-radius: 1rem !important;
+  border: 1px solid var(--app-border);
+  background: rgba(24, 29, 38, 0.96) !important;
+  color: #f8f7f3 !important;
+}
+
+.mat-mdc-list-base {
+  --mdc-list-list-item-hover-state-layer-color: transparent;
+  --mdc-list-list-item-focus-state-layer-color: transparent;
+}

@@ -21,11 +21,9 @@ interface DashboardCard {
   description: string;
   featured?: boolean;
   icon: string;
-  primaryLabel: string;
-  primaryValue: string;
   route: string;
-  secondaryLabel: string;
-  secondaryValue: string;
+  statLabel: string;
+  statValue: string;
   title: string;
 }
 
@@ -46,12 +44,7 @@ export class DashboardPageComponent {
   protected readonly errorMessage = signal<string | null>(null);
   protected readonly isLoading = signal(true);
   protected readonly stats = signal({
-    activeClients: 0,
-    activeProfessionals: 0,
-    activeServices: 0,
     appointmentsToday: 0,
-    attentionAppointments: 0,
-    totalAppointments: 0,
     totalClients: 0,
     totalProfessionals: 0,
     totalServices: 0,
@@ -66,40 +59,32 @@ export class DashboardPageComponent {
         route: '/appointments',
         icon: 'calendar_month',
         featured: true,
-        primaryLabel: 'Today',
-        primaryValue: String(stats.appointmentsToday),
-        secondaryLabel: 'Needs attention',
-        secondaryValue: String(stats.attentionAppointments),
+        statLabel: 'Today',
+        statValue: String(stats.appointmentsToday),
         description: 'Review the live schedule first and keep today moving smoothly.',
       },
       {
         title: 'Clients',
         route: '/clients',
         icon: 'groups',
-        primaryLabel: 'Active',
-        primaryValue: String(stats.activeClients),
-        secondaryLabel: 'Total records',
-        secondaryValue: String(stats.totalClients),
+        statLabel: 'Records',
+        statValue: String(stats.totalClients),
         description: 'Open client records, notes, and contact details quickly.',
       },
       {
         title: 'Professionals',
         route: '/professionals',
         icon: 'badge',
-        primaryLabel: 'Active',
-        primaryValue: String(stats.activeProfessionals),
-        secondaryLabel: 'Team size',
-        secondaryValue: String(stats.totalProfessionals),
+        statLabel: 'Records',
+        statValue: String(stats.totalProfessionals),
         description: 'Manage staff availability, specialties, and calendar ownership.',
       },
       {
         title: 'Services',
         route: '/services',
         icon: 'content_cut',
-        primaryLabel: 'Active',
-        primaryValue: String(stats.activeServices),
-        secondaryLabel: 'Catalog size',
-        secondaryValue: String(stats.totalServices),
+        statLabel: 'Records',
+        statValue: String(stats.totalServices),
         description: 'Maintain the service catalog, pricing, and appointment durations.',
       },
     ];
@@ -136,17 +121,9 @@ export class DashboardPageComponent {
           const todayKey = toDateKey(new Date());
 
           this.stats.set({
-            activeClients: clients.filter((client) => client.active).length,
-            activeProfessionals: professionals.filter((professional) => professional.active).length,
-            activeServices: services.filter((service) => service.active).length,
             appointmentsToday: appointments.filter(
               (appointment) => appointment.startAt.slice(0, 10) === todayKey,
             ).length,
-            attentionAppointments: appointments.filter(
-              (appointment) =>
-                appointment.status === 'CANCELED' || appointment.status === 'NO_SHOW',
-            ).length,
-            totalAppointments: appointments.length,
             totalClients: clients.length,
             totalProfessionals: professionals.length,
             totalServices: services.length,

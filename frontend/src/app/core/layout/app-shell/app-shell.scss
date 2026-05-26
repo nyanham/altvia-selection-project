@@ -27,8 +27,7 @@
 }
 
 .shell__brand h1,
-.shell__note p,
-.shell__section-intro p {
+.shell__note p {
   margin: 0;
 }
 
@@ -59,18 +58,13 @@
   font-size: 1.1rem;
 }
 
-.shell__section-intro p:last-child {
-  color: var(--app-text-muted);
-  font-size: 0.9rem;
-}
-
 .shell__nav {
   display: grid;
   gap: 0.2rem;
 }
 
-.shell__nav--primary {
-  gap: 0.35rem;
+.shell__nav--workflow {
+  margin-top: 0.15rem;
 }
 
 .shell__nav a {
@@ -82,9 +76,10 @@
     box-shadow 160ms ease;
 }
 
-.shell__nav--primary a {
+.shell__nav a.is-priority {
   background: rgba(31, 107, 99, 0.05);
   color: var(--app-title);
+  box-shadow: inset 0 0 0 1px rgba(31, 107, 99, 0.08);
 }
 
 .shell__nav a:hover {
@@ -92,7 +87,7 @@
   color: var(--app-title);
 }
 
-.shell__nav--primary a:hover {
+.shell__nav a.is-priority:hover {
   background: rgba(31, 107, 99, 0.1);
 }
 
@@ -101,10 +96,6 @@
   border-radius: 0.85rem;
   color: var(--app-primary-strong);
   box-shadow: inset 0 0 0 1px rgba(31, 107, 99, 0.1);
-}
-
-.shell__section-intro--secondary {
-  margin-top: 0.15rem;
 }
 
 .shell__note {

@@ -20,6 +20,11 @@ import { primaryNavigation, secondaryNavigation } from '../../config/navigation.
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppShellComponent {
-  protected readonly primaryNavigationItems = primaryNavigation;
-  protected readonly secondaryNavigationItems = secondaryNavigation;
+  protected readonly dashboardNavigationItem =
+    secondaryNavigation.find((item) => item.route === '/dashboard') ?? null;
+
+  protected readonly workflowNavigationItems = [
+    ...primaryNavigation,
+    ...secondaryNavigation.filter((item) => item.route !== '/dashboard'),
+  ];
 }

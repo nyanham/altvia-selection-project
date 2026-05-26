@@ -10,37 +10,28 @@
 
     <mat-divider></mat-divider>
 
-    <div class="shell__section-intro">
-      <p class="shell__eyebrow">Main workflow</p>
-      <p>Start with appointments</p>
-    </div>
-
-    <nav class="shell__nav shell__nav--primary" mat-nav-list>
-      @for (item of primaryNavigationItems; track item.route) {
+    @if (dashboardNavigationItem; as dashboardItem) {
+      <nav class="shell__nav shell__nav--dashboard" mat-nav-list>
         <a
           mat-list-item
-          [routerLink]="item.route"
+          [routerLink]="dashboardItem.route"
           routerLinkActive="is-active"
           [routerLinkActiveOptions]="{ exact: true }"
         >
-          <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
-          <span matListItemTitle>{{ item.label }}</span>
+          <mat-icon matListItemIcon>{{ dashboardItem.icon }}</mat-icon>
+          <span matListItemTitle>{{ dashboardItem.label }}</span>
         </a>
-      }
-    </nav>
+      </nav>
+    }
 
-    <div class="shell__section-intro shell__section-intro--secondary">
-      <p class="shell__eyebrow">Supporting areas</p>
-      <p>Overview, clients, team, and services</p>
-    </div>
-
-    <nav class="shell__nav" mat-nav-list>
-      @for (item of secondaryNavigationItems; track item.route) {
+    <nav class="shell__nav shell__nav--workflow" mat-nav-list>
+      @for (item of workflowNavigationItems; track item.route) {
         <a
           mat-list-item
           [routerLink]="item.route"
           routerLinkActive="is-active"
           [routerLinkActiveOptions]="{ exact: true }"
+          [class.is-priority]="item.route === '/appointments'"
         >
           <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
           <span matListItemTitle>{{ item.label }}</span>

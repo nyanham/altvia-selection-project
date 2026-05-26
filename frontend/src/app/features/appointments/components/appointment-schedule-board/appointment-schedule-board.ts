@@ -1,5 +1,5 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -49,10 +49,30 @@ export class AppointmentScheduleBoardComponent {
     this.appointmentGroups().reduce((total, group) => total + group.appointments.length, 0),
   );
 
+  private readonly expandedAppointmentIds = signal<ReadonlySet<number>>(new Set<number>());
+
   protected readonly statusOptions: ReadonlyArray<{ label: string; value: AppointmentStatus }> = [
     { label: 'Scheduled', value: 'SCHEDULED' },
     { label: 'Completed', value: 'COMPLETED' },
     { label: 'Canceled', value: 'CANCELED' },
     { label: 'No show', value: 'NO_SHOW' },
   ];
+
+  protected isExpanded(appointmentId: number): boolean {
+    return this.expandedAppointmentIds().has(appointmentId);
+  }
+
+  protected toggleExpanded(appointmentId: number): void {
+    this.expandedAppointmentIds.update((currentIds) => {
+      const nextIds = new Set(currentIds);
+
+      if (nextIds.has(appointmentId)) {
+        nextIds.delete(appointmentId);
+      } else {
+        nextIds.add(appointmentId);
+      }
+
+      return nextIds;
+    });
+  }
 }

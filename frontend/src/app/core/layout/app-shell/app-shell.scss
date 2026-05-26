@@ -69,6 +69,10 @@
   gap: 0.2rem;
 }
 
+.shell__nav--primary {
+  gap: 0.35rem;
+}
+
 .shell__nav a {
   border-radius: 0.85rem;
   color: var(--app-text-muted);
@@ -78,9 +82,18 @@
     box-shadow 160ms ease;
 }
 
+.shell__nav--primary a {
+  background: rgba(31, 107, 99, 0.05);
+  color: var(--app-title);
+}
+
 .shell__nav a:hover {
   background: rgba(255, 255, 255, 0.54);
   color: var(--app-title);
+}
+
+.shell__nav--primary a:hover {
+  background: rgba(31, 107, 99, 0.1);
 }
 
 .shell__nav a.is-active {
@@ -88,6 +101,10 @@
   border-radius: 0.85rem;
   color: var(--app-primary-strong);
   box-shadow: inset 0 0 0 1px rgba(31, 107, 99, 0.1);
+}
+
+.shell__section-intro--secondary {
+  margin-top: 0.15rem;
 }
 
 .shell__note {

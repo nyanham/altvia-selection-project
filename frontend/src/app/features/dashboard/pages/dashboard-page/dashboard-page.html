@@ -6,9 +6,9 @@
   <p class="dashboard-status dashboard-status--error">{{ errorMessage() }}</p>
 }
 
-<section class="dashboard-cards">
-  @for (card of cards(); track card.route) {
-    <mat-card class="dashboard-card" [routerLink]="card.route" tabindex="0" role="link">
+@if (primaryCard(); as card) {
+  <section class="dashboard-feature">
+    <mat-card class="dashboard-card dashboard-card--primary" [routerLink]="card.route" tabindex="0" role="link">
       <div class="dashboard-card__header">
         <span class="dashboard-card__icon">
           <mat-icon>{{ card.icon }}</mat-icon>
@@ -33,5 +33,39 @@
         </article>
       </div>
     </mat-card>
-  }
+  </section>
+}
+
+<section class="dashboard-secondary">
+  <p class="dashboard-secondary__eyebrow">Supporting areas</p>
+
+  <div class="dashboard-cards dashboard-cards--secondary">
+    @for (card of secondaryCards(); track card.route) {
+      <mat-card class="dashboard-card dashboard-card--secondary" [routerLink]="card.route" tabindex="0" role="link">
+        <div class="dashboard-card__header">
+          <span class="dashboard-card__icon">
+            <mat-icon>{{ card.icon }}</mat-icon>
+          </span>
+          <mat-icon class="dashboard-card__chevron">arrow_forward</mat-icon>
+        </div>
+
+        <div class="dashboard-card__copy">
+          <h2>{{ card.title }}</h2>
+          <p>{{ card.description }}</p>
+        </div>
+
+        <div class="dashboard-card__stats">
+          <article class="dashboard-card__stat">
+            <span>{{ card.primaryLabel }}</span>
+            <strong>{{ card.primaryValue }}</strong>
+          </article>
+
+          <article class="dashboard-card__stat">
+            <span>{{ card.secondaryLabel }}</span>
+            <strong>{{ card.secondaryValue }}</strong>
+          </article>
+        </div>
+      </mat-card>
+    }
+  </div>
 </section>

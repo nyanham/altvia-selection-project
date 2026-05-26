@@ -11,12 +11,31 @@
     <mat-divider></mat-divider>
 
     <div class="shell__section-intro">
-      <p class="shell__eyebrow">Workspace</p>
-      <p>Core operations</p>
+      <p class="shell__eyebrow">Main workflow</p>
+      <p>Start with appointments</p>
+    </div>
+
+    <nav class="shell__nav shell__nav--primary" mat-nav-list>
+      @for (item of primaryNavigationItems; track item.route) {
+        <a
+          mat-list-item
+          [routerLink]="item.route"
+          routerLinkActive="is-active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+          <span matListItemTitle>{{ item.label }}</span>
+        </a>
+      }
+    </nav>
+
+    <div class="shell__section-intro shell__section-intro--secondary">
+      <p class="shell__eyebrow">Supporting areas</p>
+      <p>Overview, clients, team, and services</p>
     </div>
 
     <nav class="shell__nav" mat-nav-list>
-      @for (item of navigationItems; track item.route) {
+      @for (item of secondaryNavigationItems; track item.route) {
         <a
           mat-list-item
           [routerLink]="item.route"

@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, computed, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -12,6 +19,7 @@ import { PageHeaderComponent } from '../../../../shared/ui/page-header/page-head
 
 interface DashboardCard {
   description: string;
+  featured?: boolean;
   icon: string;
   primaryLabel: string;
   primaryValue: string;
@@ -57,11 +65,12 @@ export class DashboardPageComponent {
         title: 'Appointments',
         route: '/appointments',
         icon: 'calendar_month',
+        featured: true,
         primaryLabel: 'Today',
         primaryValue: String(stats.appointmentsToday),
         secondaryLabel: 'Needs attention',
         secondaryValue: String(stats.attentionAppointments),
-        description: 'Review the live schedule and keep today moving smoothly.',
+        description: 'Review the live schedule first and keep today moving smoothly.',
       },
       {
         title: 'Clients',
@@ -95,6 +104,14 @@ export class DashboardPageComponent {
       },
     ];
   });
+
+  protected readonly primaryCard = computed<DashboardCard | null>(
+    () => this.cards().find((card) => card.featured) ?? null,
+  );
+
+  protected readonly secondaryCards = computed<DashboardCard[]>(() =>
+    this.cards().filter((card) => !card.featured),
+  );
 
   constructor() {
     this.loadDashboardStats();

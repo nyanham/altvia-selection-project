@@ -40,32 +40,77 @@
             @for (appointment of group.appointments; track appointment.id) {
               <article class="appointment-card">
                 <div class="appointment-card__time">
+                  <p class="appointment-card__eyebrow">
+                    <mat-icon>schedule</mat-icon>
+                    Time
+                  </p>
                   <strong>{{ appointment.startAt | date: 'shortTime' }}</strong>
-                  <span>{{ appointment.endAt | date: 'shortTime' }}</span>
+                  <span>Ends {{ appointment.endAt | date: 'shortTime' }}</span>
                 </div>
 
                 <div class="appointment-card__content">
                   <div class="appointment-card__header">
                     <div>
+                      <p class="appointment-card__eyebrow">Client</p>
                       <h3>{{ appointment.client.fullName }}</h3>
-                      <p class="appointment-card__service-line">
-                        {{ appointment.serviceOffering.name }}
-                        · {{ appointment.serviceOffering.durationMinutes }} min
-                        · {{ appointment.serviceOffering.price | currency }}
-                      </p>
                     </div>
 
-                    <span class="appointment-card__status" [class.is-canceled]="appointment.status === 'CANCELED'" [class.is-completed]="appointment.status === 'COMPLETED'" [class.is-no-show]="appointment.status === 'NO_SHOW'">
-                      {{ appointment.status.replace('_', ' ') }}
+                    <span
+                      class="appointment-card__status"
+                      [class.is-canceled]="appointment.status === 'CANCELED'"
+                      [class.is-completed]="appointment.status === 'COMPLETED'"
+                      [class.is-no-show]="appointment.status === 'NO_SHOW'"
+                    >
+                      <mat-icon>{{ statusDetails[appointment.status].icon }}</mat-icon>
+                      {{ statusDetails[appointment.status].label }}
                     </span>
                   </div>
 
-                  <div class="appointment-card__footer">
-                    <div class="appointment-card__meta">
-                      <span class="appointment-card__professional-dot" [style.background]="appointment.professional.colorHex"></span>
-                      <span>{{ appointment.professional.fullName }}</span>
+                  <div class="appointment-card__details">
+                    <div class="appointment-card__detail">
+                      <p class="appointment-card__detail-label">
+                        <mat-icon>content_cut</mat-icon>
+                        Service
+                      </p>
+                      <p class="appointment-card__detail-value">{{ appointment.serviceOffering.name }}</p>
                     </div>
 
+                    <div class="appointment-card__detail">
+                      <p class="appointment-card__detail-label">
+                        <mat-icon>timer</mat-icon>
+                        Duration
+                      </p>
+                      <p class="appointment-card__detail-value">
+                        {{ appointment.serviceOffering.durationMinutes }} min
+                      </p>
+                    </div>
+
+                    <div class="appointment-card__detail">
+                      <p class="appointment-card__detail-label">
+                        <mat-icon>payments</mat-icon>
+                        Price
+                      </p>
+                      <p class="appointment-card__detail-value">
+                        {{ appointment.serviceOffering.price | currency }}
+                      </p>
+                    </div>
+
+                    <div class="appointment-card__detail">
+                      <p class="appointment-card__detail-label">
+                        <mat-icon>badge</mat-icon>
+                        Professional
+                      </p>
+                      <p class="appointment-card__detail-value appointment-card__detail-value--inline">
+                        <span
+                          class="appointment-card__professional-dot"
+                          [style.background]="appointment.professional.colorHex"
+                        ></span>
+                        {{ appointment.professional.fullName }}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="appointment-card__footer">
                     <div class="appointment-card__actions">
                       <button mat-stroked-button type="button" (click)="editRequested.emit(appointment)">
                         <mat-icon>edit</mat-icon>
@@ -76,7 +121,7 @@
                         mat-icon-button
                         type="button"
                         [matMenuTriggerFor]="statusMenu"
-                        aria-label="Change appointment status"
+                        aria-label="Open appointment actions"
                       >
                         <mat-icon>more_vert</mat-icon>
                       </button>
@@ -89,7 +134,8 @@
                             [disabled]="appointment.status === statusOption.value"
                             (click)="statusRequested.emit({ appointment, status: statusOption.value })"
                           >
-                            {{ statusOption.label }}
+                            <mat-icon>{{ statusDetails[statusOption.value].icon }}</mat-icon>
+                            <span>{{ statusOption.label }}</span>
                           </button>
                         }
 
@@ -102,7 +148,10 @@
                   </div>
 
                   @if (appointment.notes) {
-                    <p class="appointment-card__notes">{{ appointment.notes }}</p>
+                    <div class="appointment-card__notes">
+                      <mat-icon>notes</mat-icon>
+                      <p>{{ appointment.notes }}</p>
+                    </div>
                   }
                 </div>
               </article>

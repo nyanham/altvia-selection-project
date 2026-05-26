@@ -36,6 +36,15 @@ export class AppointmentScheduleBoardComponent {
   readonly editRequested = output<Appointment>();
   readonly statusRequested = output<{ appointment: Appointment; status: AppointmentStatus }>();
 
+  protected readonly statusDetails: Readonly<
+    Record<AppointmentStatus, { label: string; icon: string }>
+  > = {
+    SCHEDULED: { label: 'Scheduled', icon: 'event_available' },
+    COMPLETED: { label: 'Completed', icon: 'task_alt' },
+    CANCELED: { label: 'Canceled', icon: 'event_busy' },
+    NO_SHOW: { label: 'No show', icon: 'person_off' },
+  };
+
   protected readonly totalAppointments = computed(() =>
     this.appointmentGroups().reduce((total, group) => total + group.appointments.length, 0),
   );

@@ -40,7 +40,6 @@
             @for (appointment of group.appointments; track appointment.id) {
               <article
                 class="appointment-card"
-                [class.is-expanded]="isExpanded(appointment.id)"
                 [style.--appointment-accent]="appointment.professional.colorHex"
               >
                 <div class="appointment-card__time">
@@ -91,39 +90,21 @@
                       <mat-icon>payments</mat-icon>
                       {{ appointment.serviceOffering.price | currency }}
                     </span>
-
-                    <span class="appointment-card__summary-item">
-                      <mat-icon>tag</mat-icon>
-                      #{{ appointment.id }}
-                    </span>
                   </div>
 
                   @if (appointment.notes) {
-                    <div class="appointment-card__notes" [class.is-expanded]="isExpanded(appointment.id)">
+                    <div class="appointment-card__notes">
                       <mat-icon>notes</mat-icon>
                       <p>{{ appointment.notes }}</p>
                     </div>
                   }
 
                   <div class="appointment-card__footer">
-                    <button
-                      mat-button
-                      type="button"
-                      class="appointment-card__toggle"
-                      [attr.aria-expanded]="isExpanded(appointment.id)"
-                      (click)="toggleExpanded(appointment.id)"
-                    >
-                      <mat-icon>{{ isExpanded(appointment.id) ? 'expand_less' : 'expand_more' }}</mat-icon>
-                      {{ isExpanded(appointment.id) ? 'Hide details' : 'Show details' }}
-                    </button>
-
                     <div class="appointment-card__actions">
-                      @if (isExpanded(appointment.id)) {
-                        <button mat-stroked-button type="button" (click)="editRequested.emit(appointment)">
-                          <mat-icon>edit</mat-icon>
-                          Edit
-                        </button>
-                      }
+                      <button mat-stroked-button type="button" (click)="editRequested.emit(appointment)">
+                        <mat-icon>edit</mat-icon>
+                        Edit
+                      </button>
 
                       <button
                         mat-icon-button
@@ -154,24 +135,6 @@
                       </mat-menu>
                     </div>
                   </div>
-
-                  @if (isExpanded(appointment.id)) {
-                    <div class="appointment-card__details">
-                      <div class="appointment-card__detail">
-                        <p class="appointment-card__detail-label">
-                          <mat-icon>badge</mat-icon>
-                          Professional color
-                        </p>
-                        <p class="appointment-card__detail-value appointment-card__detail-value--inline">
-                          <span
-                            class="appointment-card__professional-dot"
-                            [style.background]="appointment.professional.colorHex"
-                          ></span>
-                          {{ appointment.professional.colorHex }}
-                        </p>
-                      </div>
-                    </div>
-                  }
                 </div>
               </article>
             }
